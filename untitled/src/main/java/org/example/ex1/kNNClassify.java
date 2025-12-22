@@ -23,7 +23,7 @@ public class kNNClassify {
 
     public static void main(String[] args) {
         try {
-            List<DataPoint> trainingData = readTrainingData("training");
+            List<DataPoint> trainingData = readTrainingData("ex3/training");
             System.out.println("Cho bộ dữ liệu training có " + trainingData.size() + " điểm training");
             System.out.println("Training dataset:");
             for (DataPoint p : trainingData) {
