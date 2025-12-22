@@ -1,4 +1,4 @@
-package org.example.ex3;
+package org.example.ex4;
 
 import java.io.*;
 import java.util.*;
@@ -91,7 +91,7 @@ public class NaiveBayesClassify {
 
     private static BufferedReader getReader(String filename) throws IOException {
         InputStream is = NaiveBayesClassify.class.getClassLoader()
-                .getResourceAsStream("ex3/" + filename);
+                .getResourceAsStream("ex4/" + filename);
 
         if (is != null) {
             return new BufferedReader(new InputStreamReader(is));
