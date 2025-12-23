@@ -82,7 +82,7 @@ public class kNNClassify {
     public static void main(String[] args) {
         try {
             // Đọc toàn bộ dataset
-            List<DataPoint> allData = readDataset("dataset");
+            List<DataPoint> allData = readDataset("ex6/dataset");
             System.out.println("Cho bộ dữ liệu training có " + allData.size() + " điểm dữ liệu");
             System.out.println("Training dataset:");
             for (DataPoint p : allData) {
