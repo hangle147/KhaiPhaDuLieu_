@@ -20,12 +20,13 @@ public class DecisionTree {
 
         @Override
         public String toString() {
-            return String.format("a1=%s, a2=%s, a3=%.1f -> %s", a1, a2, a3, targetClass);
+            return String.format("a1 = %s, a2 = %s, a3 = %.1f -> %s", a1, a2, a3, targetClass);
         }
     }
 
     public static void main(String[] args) {
         try {
+            // Đọc training data
             List<DataPoint> data = readTrainingData("dataset");
             System.out.println("Cho bộ dữ liệu training có " + data.size() + " điểm training");
             System.out.println("\nTraining Dataset:");
@@ -36,16 +37,16 @@ public class DecisionTree {
                 System.out.printf("%-10d %-5s %-5s %-8.1f %-15s\n", i + 1, p.a1, p.a2, p.a3, p.targetClass);
             }
 
-            // Part A: Entropy với positive class
+            // Entropy với positive class
             System.out.println("\n" + "=".repeat(80));
-            System.out.println("PART A: ENTROPY OF TRAINING SAMPLES (POSITIVE CLASS = '+')");
+            System.out.println("Entropy với positive class'+'");
             System.out.println("=".repeat(80));
             double entropy = calculateEntropy(data, "+");
             System.out.printf("\nEntropy = %.4f\n", entropy);
 
-            // Part B: Best split theo Information Gain
+            // Phân chia tốt nhất theo Information Gain
             System.out.println("\n" + "=".repeat(80));
-            System.out.println("PART B: BEST SPLIT ACCORDING TO INFORMATION GAIN");
+            System.out.println("Phân chia tốt nhất theo Information Gain");
             System.out.println("=".repeat(80));
 
             double gainA1 = calculateInformationGain(data, "a1", entropy);
@@ -53,7 +54,7 @@ public class DecisionTree {
             double gainA3 = calculateInformationGainContinuous(data, "a3", entropy);
 
             System.out.println("\n" + "-".repeat(80));
-            System.out.println("INFORMATION GAIN SUMMARY:");
+            System.out.println("Information Gain Summary:");
             System.out.println("-".repeat(80));
             System.out.printf("  Gain(a1) = %.4f\n", gainA1);
             System.out.printf("  Gain(a2) = %.4f\n", gainA2);
@@ -65,11 +66,11 @@ public class DecisionTree {
             else if (maxGain == gainA2) bestAttr = "a2";
             else bestAttr = "a3";
 
-            System.out.printf("\n  → Best split: %s (Information Gain = %.4f)\n", bestAttr, maxGain);
+            System.out.printf("\n  → Phân chia tốt nhất: %s (Information Gain = %.4f)\n", bestAttr, maxGain);
 
-            // Part C: Best split theo Gini Index
+            // Phân chia tốt nhất theo chỉ số Gini
             System.out.println("\n" + "=".repeat(80));
-            System.out.println("PART C: BEST SPLIT ACCORDING TO GINI INDEX");
+            System.out.println("Phân chia tốt nhất theo chỉ số Gini");
             System.out.println("=".repeat(80));
 
             double giniA1 = calculateGiniSplit(data, "a1");
@@ -77,7 +78,7 @@ public class DecisionTree {
             double giniA3 = calculateGiniSplitContinuous(data, "a3");
 
             System.out.println("\n" + "-".repeat(80));
-            System.out.println("GINI INDEX SUMMARY:");
+            System.out.println("Chỉ số Gini Summary:");
             System.out.println("-".repeat(80));
             System.out.printf("  Gini(a1) = %.4f\n", giniA1);
             System.out.printf("  Gini(a2) = %.4f\n", giniA2);
@@ -89,7 +90,7 @@ public class DecisionTree {
             else if (minGini == giniA2) bestAttrGini = "a2";
             else bestAttrGini = "a3";
 
-            System.out.printf("\n  → Best split: %s (Gini Index = %.4f)\n", bestAttrGini, minGini);
+            System.out.printf("\n  → Phân chia tốt nhất: %s (Chỉ số Gini = %.4f)\n", bestAttrGini, minGini);
 
         } catch (IOException e) {
             System.err.println("Lỗi: " + e.getMessage());
@@ -102,22 +103,8 @@ public class DecisionTree {
                 .getResourceAsStream("ex8/" + filename);
 
         if (is != null) {
-            System.out.println("Đọc file từ resources: ex8/" + filename);
             return new BufferedReader(new InputStreamReader(is));
         }
-
-        File file = new File("src/main/resources/ex8/" + filename);
-        if (file.exists()) {
-            System.out.println("Đọc file từ: " + file.getAbsolutePath());
-            return new BufferedReader(new FileReader(file));
-        }
-
-        file = new File(filename);
-        if (file.exists()) {
-            System.out.println("Đọc file từ: " + file.getAbsolutePath());
-            return new BufferedReader(new FileReader(file));
-        }
-
         throw new FileNotFoundException("Không tìm thấy file: " + filename);
     }
 
@@ -177,9 +164,10 @@ public class DecisionTree {
         return entropy;
     }
 
+    //Tính Information Gain
     public static double calculateInformationGain(List<DataPoint> data, String attribute, double parentEntropy) {
         System.out.println("\n" + "-".repeat(80));
-        System.out.println("Calculating Information Gain for attribute: " + attribute);
+        System.out.println("Information Gain cho thuộc tính: " + attribute);
         System.out.println("-".repeat(80));
 
         Map<String, List<DataPoint>> partitions = new HashMap<>();
@@ -206,7 +194,7 @@ public class DecisionTree {
             }
             int negativeCount = subsetSize - positiveCount;
 
-            System.out.printf("\n  %s = %s: %d instances (%d positive, %d negative)\n",
+            System.out.printf("\n  %s = %s: %d Mẫu (%d positive, %d negative)\n",
                     attribute, value, subsetSize, positiveCount, negativeCount);
 
             double pPositive = (double) positiveCount / subsetSize;
@@ -239,14 +227,14 @@ public class DecisionTree {
 
     public static double calculateInformationGainContinuous(List<DataPoint> data, String attribute, double parentEntropy) {
         System.out.println("\n" + "-".repeat(80));
-        System.out.println("Calculating Information Gain for continuous attribute: " + attribute);
+        System.out.println("Tính Information Gain cho thuộc tính liên tục: " + attribute);
         System.out.println("-".repeat(80));
 
         // Sắp xếp data theo a3
         List<DataPoint> sortedData = new ArrayList<>(data);
         sortedData.sort(Comparator.comparingDouble(p -> p.a3));
 
-        System.out.println("\nSorted by a3:");
+        System.out.println("\nSắp xếp theo a3:");
         for (DataPoint p : sortedData) {
             System.out.printf("  a3=%.1f -> %s\n", p.a3, p.targetClass);
         }
@@ -260,7 +248,7 @@ public class DecisionTree {
             }
         }
 
-        System.out.println("\nPossible split points: " + splitPoints);
+        System.out.println("\nĐiểm có thể tách: " + splitPoints);
 
         double maxGain = -1;
         double bestSplit = 0;
@@ -278,9 +266,9 @@ public class DecisionTree {
                 }
             }
 
-            System.out.printf("\nSplit at a3 <= %.1f:\n", splitPoint);
-            System.out.printf("  Left: %d instances\n", left.size());
-            System.out.printf("  Right: %d instances\n", right.size());
+            System.out.printf("\nPhân tách a3 <= %.1f:\n", splitPoint);
+            System.out.printf("  Trái: %d mẫu\n", left.size());
+            System.out.printf("  Phải: %d mẫu\n", right.size());
 
             double leftEntropy = calculateEntropyForSubset(left);
             double rightEntropy = calculateEntropyForSubset(right);
@@ -299,15 +287,16 @@ public class DecisionTree {
             }
         }
 
-        System.out.printf("\n  → Best split point: a3 <= %.1f\n", bestSplit);
-        System.out.printf("  → Maximum Information Gain = %.4f\n", maxGain);
+        System.out.printf("\n  → Điểm phân tách tốt nhất: a3 <= %.1f\n", bestSplit);
+        System.out.printf("  → Information Gain lớn nhất = %.4f\n", maxGain);
 
         return maxGain;
     }
 
+    //Tính chỉ số Gini cho thuộc tính
     public static double calculateGiniSplit(List<DataPoint> data, String attribute) {
         System.out.println("\n" + "-".repeat(80));
-        System.out.println("Calculating Gini Index for attribute: " + attribute);
+        System.out.println("Tính chỉ số Gini cho thuộc tính: " + attribute);
         System.out.println("-".repeat(80));
 
         Map<String, List<DataPoint>> partitions = new HashMap<>();
@@ -334,7 +323,7 @@ public class DecisionTree {
             }
             int negativeCount = subsetSize - positiveCount;
 
-            System.out.printf("\n  %s = %s: %d instances (%d positive, %d negative)\n",
+            System.out.printf("\n  %s = %s: %d mẫu (%d positive, %d negative)\n",
                     attribute, value, subsetSize, positiveCount, negativeCount);
 
             double pPositive = (double) positiveCount / subsetSize;
@@ -351,14 +340,15 @@ public class DecisionTree {
             System.out.printf("    Weight = %d/%d = %.4f\n", subsetSize, total, weight);
         }
 
-        System.out.printf("\n  Weighted Gini Index = %.4f\n", weightedGini);
+        System.out.printf("\n Chỉ số Weighted Gini = %.4f\n", weightedGini);
 
         return weightedGini;
     }
 
+    // Tính chỉ số Gini cho thuộc tính liên tục
     public static double calculateGiniSplitContinuous(List<DataPoint> data, String attribute) {
         System.out.println("\n" + "-".repeat(80));
-        System.out.println("Calculating Gini Index for continuous attribute: " + attribute);
+        System.out.println("Tính chỉ số Gini cho thuộc tính liên tục: " + attribute);
         System.out.println("-".repeat(80));
 
         List<DataPoint> sortedData = new ArrayList<>(data);
@@ -401,12 +391,13 @@ public class DecisionTree {
             }
         }
 
-        System.out.printf("\n  → Best split point: a3 <= %.1f\n", bestSplit);
-        System.out.printf("  → Minimum Gini Index = %.4f\n", minGini);
+        System.out.printf("\n  → Điểm phân tách tốt nhất: a3 <= %.1f\n", bestSplit);
+        System.out.printf("  → Chỉ số Gini nhỏ nhất = %.4f\n", minGini);
 
         return minGini;
     }
 
+    // Tính entropy cho tập con
     private static double calculateEntropyForSubset(List<DataPoint> subset) {
         if (subset.isEmpty()) return 0.0;
 
@@ -426,6 +417,7 @@ public class DecisionTree {
         return entropy;
     }
 
+    // Tính gini cho tập con
     private static double calculateGiniForSubset(List<DataPoint> subset) {
         if (subset.isEmpty()) return 0.0;
 
